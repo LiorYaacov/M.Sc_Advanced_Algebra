@@ -11,7 +11,7 @@ Example:
     p1-p2 = -2(mod 7) = 5
     p1*p2 = 15(mod 7) = 1
     p1/p2 = 
-
+'''
 
 def addition(p1,p2,m):
 
