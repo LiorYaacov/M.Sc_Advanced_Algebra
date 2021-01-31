@@ -41,9 +41,18 @@ def multiply(p1,p2,m):
     return product%m
 
 def division(p1,p2,m):
-
+    pass
     # TBD
 
+def gcd(a,b):
+    # Calculates gcd(a,b)
+
+    r = a%b
+
+    if (r==0):
+        return b
+    
+    return gcd(b,r)
 
 def rgcd(a,b):
     # Calculates gcd recursively
@@ -57,3 +66,5 @@ def rgcd(a,b):
     k2 = x
 
     return d,k1,k2
+
+print(gcd(7,28))
