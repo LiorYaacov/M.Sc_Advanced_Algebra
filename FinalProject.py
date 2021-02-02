@@ -132,6 +132,10 @@ def naive_order(p1,m):
 
     return k 
 
+
+def group_order(p):
+
+    return 
 ## Drivers
 '''
 print(f"19/5 (mod 12) = {division(19,5,12)}")   # = 11 (mod 12)
