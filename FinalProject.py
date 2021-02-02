@@ -82,6 +82,13 @@ def inverse(a,m):
     if d==1:
         return k1
 
+def inverse_fermat(a,m):
+    # Calculates inv(a) using Fermat's Theorem:
+    # inv(a) = a^(p-2)
+    # https://crypto.stanford.edu/pbc/notes/numbertheory/order.html
+
+    return pow(a,m-2)%m
+
 def egcd(a,b):
     # Calculates gcd recursively
 
@@ -96,9 +103,41 @@ def egcd(a,b):
     return d,k1,k2
 
 
+def exp_by_square(base, exp, m):
+    # Calculates base^exp using squaring
 
+    if (exp == 0):
+        return 1
+    if (exp == 1):
+        return base%m
+    
+    x = exp_by_square(base, exp//2)
+    x = (x*x) % m
+
+    if (exp%2 == 0):
+        return x
+    else:
+        return (((base%m) * x) % m)
+    
+
+
+def naive_order(p1,m):
+
+    k = 1
+    a = p1
+    while a != 1:
+        a *= p1
+        a %= m
+        k += 1
+
+    return k 
+
+
+def group_order(p):
+
+    return 
 ## Drivers
-
+'''
 print(f"19/5 (mod 12) = {division(19,5,12)}")   # = 11 (mod 12)
 print(f"30/6 (mod 2) = {division(30,6,2)}")     # Can't divide by zero
 print(f"30/3 (mod 2) = {division(30,3,2)}")     # Can't divide by zero
@@ -107,3 +146,11 @@ print(f"1516416/12312312 (mod 5) = {division(1516416,12312312,5)}")     # = 3
 
 print(f"-12312/12 (mod 5) = {division(-12312,12,5)}")     # = 4
 print(f"-12312/-12 (mod 5) = {division(-12312,-12,5)}")     # = 4
+
+print(f"inv(10) mod(19) = {inverse_fermat(10,19)}")
+
+print(f"o(15) mod(121) = {naive_order(15,121)}")
+#print(f"o(12312312) mod(10888869450418352160768000001) = {naive_order(12312312,10888869450418352160768000001)}")
+'''
+
+print(exp_by_square(2,12,10))
