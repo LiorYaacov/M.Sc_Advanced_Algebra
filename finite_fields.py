@@ -97,6 +97,9 @@ class Fp:
         else:
             exp = p2
         
+        if exp == 0:
+            return 1
+
         for _ in range(2,exp+1):
             base *= self.p
             base %= self.mod
@@ -139,16 +142,15 @@ class Fp:
         return i
 
     def safe_prime_order(self):
-        pass
         # TBD
-        # if self**1 == 1:
-        #     return 1
-        # elif self**2 == 1:
-        #     return 2
-        # elif self**(self.mod - 1) == 1:
-        #     return self.mod - 1
-        # elif self**((self.mod-1)/2) == 1:
-        #     return (self.mod-1)/2
+        if self**1 == 1:
+            return 1
+        if self**2 == 1:
+            return 2
+        if self**(self.mod - 1) == 1:
+            return self.mod - 1
+        if self**((self.mod-1)/2) == 1:
+            return (self.mod-1)/2
 
 '''
     def egcd(a,b):
@@ -218,20 +220,7 @@ p256_263 = Fp(256,263)
 '''
 #print(p3.safe_prime_order())
 print(f"o(2) (mod 263) = {p2_263.safe_prime_order()}")
-print(f"o(9) (mod 263) = {p9_263.safe_prime_order()}")
-print(f"o(255) (mod 263) = {p255_263.safe_prime_order()}")
-print(f"o(256) (mod 263) = {p256_263.safe_prime_order()}")
-
-
-print(f"** o(2) (mod 263) = {p2_263.mul_element_order()}")
-
-'''
-print(f"2^131 (mod 263) = {p2_263**131}")
-print(f"2^255 (mod 263) = {p2_263**255}")
-
-print(f"o(2) (mod 263) = {p2_263.safe_prime_order()}")
-
-#print("power - exponent")
+print(f"o(9) (mod 263) = {p9_263.safe_prime_orderprint(f"o(2) (mod 263) = {p2_263.safe_prime_order()}")
 #print(p4**3)
 # for i in range(2,7):
-#     print(p4**i)
+#     print(p4**i)print(f"o(2) (mod 263) = {p2_263.safe_prime_order()}")   
