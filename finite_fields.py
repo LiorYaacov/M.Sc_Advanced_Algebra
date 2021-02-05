@@ -34,8 +34,6 @@ class Fp:
 
 
 
-
-
     def __init__(self, p, mod):
         self.p = p%mod
         self.mod = mod
