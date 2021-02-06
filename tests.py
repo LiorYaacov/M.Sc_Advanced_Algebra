@@ -123,14 +123,28 @@ def add_points(p1,p2,p):
 
 def plot_curve(a,b,p):
 
-    # y^2 = x^3 + ax + b
+    # Plot curve
+    y, x = np.ogrid[-5:5:100j, -5:5:100j]
 
-    x = np.arange(-15,15,1)
+    curve = (y**2) - (x**3) - (a*x) - b
+    plt.contour(x.ravel(), y.ravel(), curve, [0])
+    plt.grid()
+    
+    # Plot axis
+    plt.axvline(x=0, color='k')
+    plt.axhline(y=0, color='k')
 
-    plt.plot(x)
+    # X and Y limits
+    # plt.xlim(-10,10)
+    # plt.ylim(-10,10)
+
+    # Plot point on graph
+    #plt.scatter([0],[1])
+
+
     plt.show()
 
-plot_curve(1,1,3)
+plot_curve(-3,5,5)
 
 # ppoints = projective_elliptic_curve_points(1,1,97)
 # print(ppoints)
