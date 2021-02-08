@@ -114,6 +114,9 @@ class Fp:
         return y
 
 
+    def add_group_order(self):
+        return 'TBD'
+
     def add_element_order(self):
         # Calculates the order of p (+ mod p)
         
@@ -221,4 +224,4 @@ print(f"o(2) (mod 263) = {p2_263.safe_prime_order()}")
 print(f"o(9) (mod 263) = {p9_263.safe_prime_orderprint(f"o(2) (mod 263) = {p2_263.safe_prime_order()}")
 #print(p4**3)
 # for i in range(2,7):
-#     print(p4**i)print(f"o(2) (mod 263) = {p2_263.safe_prime_order()}")   
+#     print(p4**i)print(f"o(2) (mod 263) = {p2_263.safe_prime_order()}")   '''
