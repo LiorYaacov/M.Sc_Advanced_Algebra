@@ -109,22 +109,37 @@ class Fp:
     def inverse(self):
         # Calculates the inverse of self.p using
         # the Extended Euclidean Algorithm
+        #
+        # Apply to multiplication only
+
+        # Get d,x,y (where: x*mod + y*p = d)
+
         d,x,y = Fp.egcd(self.mod, self.p)
 
+        while(y<0):
+            y += self.mod
         return y
 
 
-    def add_group_order(self):
-        return 'TBD'
+    def group_orders(self):
+        # Returns group's orders in a tuple
+        # 
+        # (add_group_order, mul_group_order)
+
+        add_group_order = self.mod
+        #mul_group_order = TBD
+        
+        return (add_group_order,-1)
 
     def add_element_order(self):
         # Calculates the order of p (+ mod p)
         
         i=1
-        order = self.p
+        current = self.p
         
-        while(order != self.e_add):
-            order = self+order
+        while(current != self.e_add):
+            current += 1
+            current %= self.mod
             i += 1
         
         return i
