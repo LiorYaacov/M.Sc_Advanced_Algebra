@@ -146,11 +146,13 @@ def plot_curve(a,b,p):
 
 plot_curve(-3,5,5)
 
-# ppoints = projective_elliptic_curve_points(1,1,97)
-# print(ppoints)
+a,b,p = 3,-5,97
+ppoints = projective_elliptic_curve_points(a,b,p)
+print(ppoints)
+print(len(ppoints))
 
-# points = affine_elliptic_curve_points(a=1,b=1,p=11)
-# print(points)
+points = affine_elliptic_curve_points(a,b,p)
+print(points)
 
 
 # print(add_points((1,5),(0,1),11))

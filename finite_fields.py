@@ -1,3 +1,5 @@
+import time
+
 class Fp:
     # A class to describe the finite field Fp
     # Example:
@@ -149,24 +151,54 @@ class Fp:
         # Calculates the order of p (* mod p)
         
         i=1
-        order = self.p
+        current = self.p
         
-        while(order != self.e_mul):
-            order = self*order
+        while(current != self.e_mul):
+            current *= self.p
+            current %= self.mod
             i += 1
         
         return i
+    
 
-    def safe_prime_order(self):
-        # TBD
-        if self**1 == 1:
+
+    def exp_by_square(self, base, exp, m):
+    # Calculates base^exp%m using squaring
+
+        if (exp == 0):
             return 1
-        if self**2 == 1:
-            return 2
-        if self**(self.mod - 1) == 1:
-            return self.mod - 1
-        if self**((self.mod-1)/2) == 1:
-            return (self.mod-1)/2
+        if (exp == 1):
+            return base%m
+        
+        x = self.exp_by_square(base, exp//2, m)
+
+        print(f"{base}^{exp} = {x}")
+        
+        x = (x*x) % m
+
+        
+        if (exp%2 == 0):
+            return x
+        else:
+            return (((base%m) * x) % m)
+    
+    '''    
+def safe_prime_mul_order(p,m):
+
+    if (p**1)%m == 1:
+        return 1
+    elif (p**2)%m == 1:
+        return 2
+    elif (exp_by_square(p,((m-1)/2),m)) == 1:
+        return int((m-1)/2)
+    elif (exp_by_square(p,m-1,m)) == 1:
+        return m-1
+    '''
+
+
+
+
+
 
 '''
     def egcd(a,b):
@@ -183,7 +215,7 @@ class Fp:
         return d,k1,k2
     '''
 
-
+'''
 # Driver Code:
 
 p0 = Fp(0,7)
@@ -201,7 +233,7 @@ p6 = Fp(6,7)
 
 
 #print(Fp.gcd(Fp(21,7),Fp(3,7)))
-'''
+
 print(f"5/2 = {p5/p2} (mod 7)")     # 5/2 = 6 (mod 7)
 print(f"5/3 = {p5/p3} (mod 7)")     # 5/3 = 4 (mod 7)
 
@@ -221,7 +253,7 @@ print(f"o(2) = {p2.add_element_order()}")
 
 
 
-'''
+
 p2_23 = Fp(2,23)
 p20_23 = Fp(20,23)
 print(f"o(2) (mod23) = {p2_23.mul_element_order()}")
@@ -233,10 +265,17 @@ p9_263 = Fp(9,263)
 p255_263 = Fp(255,263)
 p256_263 = Fp(256,263)
 
-'''
+
 #print(p3.safe_prime_order())
 print(f"o(2) (mod 263) = {p2_263.safe_prime_order()}")
 print(f"o(9) (mod 263) = {p9_263.safe_prime_orderprint(f"o(2) (mod 263) = {p2_263.safe_prime_order()}")
 #print(p4**3)
 # for i in range(2,7):
 #     print(p4**i)print(f"o(2) (mod 263) = {p2_263.safe_prime_order()}")   '''
+
+p = Fp(10,2)
+
+start_time = time.time()
+print(p.exp_by_square(5,22,10))
+end_time = time.time()
+print(end_time-start_time)

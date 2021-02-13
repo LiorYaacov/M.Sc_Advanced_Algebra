@@ -1,3 +1,5 @@
+import time
+
 '''
 Fp = (Zp, +mod p, *mod p)
 
@@ -111,7 +113,7 @@ def exp_by_square(base, exp, m):
     if (exp == 1):
         return base%m
     
-    x = exp_by_square(base, exp//2)
+    x = exp_by_square(base, exp//2, m)
     x = (x*x) % m
 
     if (exp%2 == 0):
@@ -119,38 +121,21 @@ def exp_by_square(base, exp, m):
     else:
         return (((base%m) * x) % m)
     
+def safe_prime_mul_order(p,m):
 
+    if (p**1)%m == 1:
+        return 1
+    elif (p**2)%m == 1:
+        return 2
+    elif (exp_by_square(p,((m-1)/2),m)) == 1:
+        return int((m-1)/2)
+    elif (exp_by_square(p,m-1,m)) == 1:
+        return m-1
 
-def naive_order(p1,m):
+# Driver Code:
 
-    k = 1
-    a = p1
-    while a != 1:
-        a *= p1
-        a %= m
-        k += 1
+start_time = time.time()
+print(exp_by_square(83,10001,1501))
+end_time = time.time()
+print(end_time-start_time)
 
-    return k 
-
-
-def group_order(p):
-
-    return 
-## Drivers
-'''
-print(f"19/5 (mod 12) = {division(19,5,12)}")   # = 11 (mod 12)
-print(f"30/6 (mod 2) = {division(30,6,2)}")     # Can't divide by zero
-print(f"30/3 (mod 2) = {division(30,3,2)}")     # Can't divide by zero
-print(f"30/3 (mod 2) = {division(30,3,2)}")     # = 0
-print(f"1516416/12312312 (mod 5) = {division(1516416,12312312,5)}")     # = 3
-
-print(f"-12312/12 (mod 5) = {division(-12312,12,5)}")     # = 4
-print(f"-12312/-12 (mod 5) = {division(-12312,-12,5)}")     # = 4
-
-print(f"inv(10) mod(19) = {inverse_fermat(10,19)}")
-
-print(f"o(15) mod(121) = {naive_order(15,121)}")
-#print(f"o(12312312) mod(10888869450418352160768000001) = {naive_order(12312312,10888869450418352160768000001)}")
-'''
-
-print(exp_by_square(2,12,10))

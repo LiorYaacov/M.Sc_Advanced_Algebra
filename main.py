@@ -10,32 +10,38 @@ class final_project:
 
         ''' Frames '''
         # Top Frame
-        self.top_frame = tk.Frame(main, width=500, height=200, bg="white")
-        self.top_frame.grid(row=0, column=0, padx=10, pady=5)
+        self.top_frame = tk.Frame(main, width=500, height=500, highlightthickness=1, highlightbackground="#FFFFFF")
+        self.top_frame.grid()#row=0, column=0, padx=10, pady=5,columnspan=2)
         # Advanced Algebra - Final Project (Label)
         tk.Label(self.top_frame, text="Advanced Algebra - Final Project", font=("Arial Bold",20)).grid(row=1,column=0, padx=5, pady=5)
 
         # Middle Frame
-        self.middle_frame = tk.Frame(main,width=500, height=400)
-        self.middle_frame.grid(row=1,column=0,padx=10,pady=5)
+        self.middle_frame = tk.Frame(main,width=250, height=400,highlightthickness=1, highlightbackground="#FFFFFF")
+        self.middle_frame.grid(row=1,column=0,padx=10,pady=5,columnspan=1)
+        # Projective Curves Frame
+        self.projective_frame = tk.Frame(main,width=250,height=300,highlightthickness=1,highlightbackground="#FFFF00")
+        self.projective_frame.grid(row=1,column=1,columnspan=1)
+        
         # Calculator Frame (inside Middle Frame)
-        self.calc_frame = tk.Frame(self.middle_frame,width=400,height=100)
+        self.calc_frame = tk.Frame(self.middle_frame,width=400,height=100,highlightthickness=1, highlightbackground="#FFFFFF")
         self.calc_frame.grid(row=4,column=2,pady=15)
+        # Exponentiation by Squaring Frame
+        self.ebs_frame = tk.Frame(self.middle_frame, width=400,height=500,highlightthickness=1, highlightbackground="#FFFFFF")
+        self.ebs_frame.grid(row=5,column=2,pady=15)
 
         # Results Frame
         self.results_frame = tk.Frame(main,width=500,height=200)
         self.results_frame.grid(row=2, column=0)
 
 
-
         self.Fp_L = tk.Label(self.middle_frame, text="Fp: ")
-        self.Fp_L.grid(row=0,column=0)
+        self.Fp_L.grid(row=0,column=0, sticky=tk.W)
 
         self.Fp_E = tk.Entry(self.middle_frame, width=5)
-        self.Fp_E.grid(row=0,column=1)
+        self.Fp_E.grid(row=0,column=1, sticky=tk.W)
 
-        self.Fp_B = tk.Button(self.middle_frame, text="Select", command=self.select_Fp)
-        self.Fp_B.grid(row=0,column=2)
+        self.Fp_B = tk.Button(self.middle_frame, text="Show Field Orders", command=self.select_Fp)
+        self.Fp_B.grid(row=0,column=2, sticky=tk.W)
 
         # Element
         self.p1_L = tk.Label(self.middle_frame, text="p1:").grid(row=2,column=0)
@@ -66,24 +72,41 @@ class final_project:
         # Element's Order
         self.element_add_order_B = tk.Button(self.calc_frame, text="o(p),+", command=lambda: self.element_order('add'))
         self.element_add_order_B.grid(row=3,column=0)
-        self.element_mul_order_B = tk.Button(self.calc_frame, text="o(p),*", command=lambda: self.inverse('add'))
+        self.element_mul_order_B = tk.Button(self.calc_frame, text="o(p),*", command=lambda: self.element_order('mul'))
         self.element_mul_order_B.grid(row=3,column=1)
+        # Exponentiation by Squaring
+        self.base_L = tk.Label(self.ebs_frame, text="Base:").grid(row=5,column=0, sticky=tk.W)
+        self.exp_L = tk.Label(self.ebs_frame, text="Exp:").grid(row=5,column=1, sticky=tk.W)
+        self.modulo_L = tk.Label(self.ebs_frame, text="Modulo:").grid(row=5,column=2, sticky=tk.W)
+        self.base_E = tk.Entry(self.ebs_frame, width=5)
+        self.base_E.grid(row=6,column=0, sticky=tk.W)
+        self.exp_E = tk.Entry(self.ebs_frame, width=5)
+        self.exp_E.grid(row=6,column=1, sticky=tk.W)
+        self.modulo_E = tk.Entry(self.ebs_frame, width=5)
+        self.modulo_E.grid(row=6,column=2, sticky=tk.W)
+
+        self.ebs_B = tk.Button(self.ebs_frame, text="Exponentiation by Squaring", command=self.ebs)
+        self.ebs_B.grid(row=7,column=0, pady=10, columnspan=3)
 
         # Results
-        self.results_TB = tk.Text(self.results_frame)#, state=tk.DISABLED)
+        self.results_TB = tk.Text(self.results_frame)
         self.results_TB.grid(row=0,column=0)
         self.results_clear_B = tk.Button(self.results_frame, text="Clear", command=self.clear_TB)
         self.results_clear_B.grid(row=1, column=0)
-        # self.result_L = tk.Label(self.results_frame)
-        # self.result_L.grid(row=3, column=1, pady=100)
 
 
     
     def select_Fp(self):
-        p = int(self.Fp_E.get())
+        try:
+            p = int(self.Fp_E.get())
+        except ValueError:
+            messagebox.showerror("Values Error", "Please enter valid integers")
+            return
+
         add_group_order,mul_group_order = Fp.group_orders(Fp(1,int(self.Fp_E.get())))
-        self.results_TB.insert(tk.END, f"o(F{p},+) = {add_group_order}\n")
-        self.results_TB.insert(tk.END, f"o(F{p},*) = {mul_group_order}\n")
+        
+        self.results_TB.insert(tk.END, f"(|F{p}|,+) = {add_group_order}\n")
+        self.results_TB.insert(tk.END, f"(|F{p}|,*) = {mul_group_order}\n")
         
     def addition(self):
         
@@ -192,7 +215,29 @@ class final_project:
             result = Fp.add_element_order(Fp(p1,p))
             # Print to GUI
             self.results_TB.insert(tk.END, f"o({p1}),+ = {result}\n")
-    
+        
+        elif method=='mul':
+            result = Fp.mul_element_order(Fp(p1,p))
+            # Print to GUI
+            self.results_TB.insert(tk.END, f"o({p1}),* = {result}\n")
+
+    def ebs(self):
+
+        try:
+            base = int(self.base_E.get())
+            exp = int(self.exp_E.get())
+            mod = int(self.modulo_E.get())
+        except ValueError:
+            messagebox.showerror("Values Error", "Please enter valid integers")
+            return
+
+        p = Fp(base,mod)
+
+        print(base,exp,mod)
+        result = p.exp_by_square(base,exp,mod)
+
+        # Print to GUI
+        self.results_TB.insert(tk.END, f"{base}^{exp} = {result} (mod {mod})\n")
 
     def clear_TB(self):
         self.results_TB.delete("1.0", "end")
