@@ -4,7 +4,8 @@ import matplotlib.pyplot as plt
 
 
 def eliptic_curve(x1,y1,x2,y2):
-
+    
+    # Might Be Unused
     x3 = ( (y2-y1)/(x2-x1) )**2 - x1 - x2
     y3 = -y1 + ( (y2-y1)/(x2-x1) )*(x1-x3)
 
@@ -61,42 +62,7 @@ def affine_elliptic_curve_points(a,b,p):
                 points.append( (x,y) )
 
     return points
-def projective_elliptic_curve_points(a,b,p):
-
-    points = []
-    related = [(0,0,0)]
-
-    for x in range(p):
-        for y in range(p):
-            for z in range(p):
-                # if z=0 -> infinity point
-                if x==y==z==0:
-                    continue
-                
-                # Y^2*Z - X^3 - a*X*Z^2 - b*Z^3 = 0
-                c1 = ((y**2)*z)%p
-                c2 = (x**3)%p
-                c3 = (a*x*(z**2))%p
-                c4 = (b*(z**3))%p
-
-                C = (c1-c2-c3-c4)%p
-
-                if C == 0:
-
-                    if (x,y,z) not in related:
-                        points.append( (x,y,z) )
-                        #print(f"{x}:{y}:{z}")
-                    
-                        # Find all related points
-                        (x1,y1,z1) = (x,y,z)
-
-                        while not ((x1,y1,z1) == (0,0,0)):
-                            (x1,y1,z1) = ((x1+x)%p,(y1+y)%p,(z1+z)%p)
-                            if (x1,y1,z1) not in related:
-                                related.append((x1,y1,z1))
-
-    return points
-
+    
 def add_points(p1,p2,p):
     # Returns the results of p1+p2 (mod p)
     
@@ -144,41 +110,59 @@ def plot_curve(a,b,p):
 
     plt.show()
 
-plot_curve(-3,5,5)
 
-a,b,p = 3,-5,97
+def projective_elliptic_curve_points(a,b,p):
+
+    points = []
+    related = [(0,0,0)]
+
+    for x in range(p):
+        for y in range(p):
+            for z in range(p):
+                # if z=0 -> infinity point
+                if x==y==z==0:
+                    continue
+                
+                # Y^2*Z - X^3 - a*X*Z^2 - b*Z^3 = 0
+                c1 = ((y**2)*z)%p
+                c2 = (x**3)%p
+                c3 = (a*x*(z**2))%p
+                c4 = (b*(z**3))%p
+
+                C = (c1-c2-c3-c4)%p
+
+                if C == 0:
+
+                    if (x,y,z) not in related:
+                        points.append( (x,y,z) )
+                        print(f"{x}:{y}:{z}")
+                    
+                        # Find all related points
+                        (x1,y1,z1) = (x,y,z)
+
+                        while not ((x1,y1,z1) == (0,0,0)):
+                            (x1,y1,z1) = ((x1+x)%p,(y1+y)%p,(z1+z)%p)
+                            if (x1,y1,z1) not in related:
+                                related.append((x1,y1,z1))
+
+    return points
+
+a,b,p = 3,-5,211
+
+''' Projective Elliptic Curve '''
 ppoints = projective_elliptic_curve_points(a,b,p)
 print(ppoints)
-print(len(ppoints))
+# print(len(ppoints))
 
-points = affine_elliptic_curve_points(a,b,p)
-print(points)
+''' Affine Elliptic Curve '''
+# points = affine_elliptic_curve_points(a,b,p)
+# print(points)
 
 
+''' Add Points '''
 # print(add_points((1,5),(0,1),11))
 # print(add_points((1,6),(2,0),11))
 # print(add_points((2,0),(2,0),11))
 
 
-'''
-pairs = smooth_curve(43,-1)
-print(f"pairs: {pairs}")
-print(f"len(pairs) = {len(pairs)}")
-
-
-
-
-# Example 1:
-x1,y1 = 0,-1
-x2,y2 = 1,1
-
-print(f"(x3,y3) = {eliptic_curve(x1,y1,x2,y2)}")
-
-
-# Example 2
-x1,y1 = -0.577,-1.117
-x2,y2 = 0.577,0.784
-
-ec2 = eliptic_curve(x1,y1,x2,y2)
-print(f"(x3,y3) = (%.3f,%.3f)" % (ec2[0],ec2[1]))
-print(f"y = %.3fx + %.3f" % (ec2[2],ec2[3]))'''
+plot_curve(-3,5,5)

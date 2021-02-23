@@ -18,10 +18,25 @@ class final_project:
         # Middle Frame
         self.middle_frame = tk.Frame(main,width=250, height=400,highlightthickness=1, highlightbackground="#FFFFFF")
         self.middle_frame.grid(row=1,column=0,padx=10,pady=5,columnspan=1)
-        # Projective Curves Frame
-        self.projective_frame = tk.Frame(main,width=250,height=300,highlightthickness=1,highlightbackground="#FFFF00")
-        self.projective_frame.grid(row=1,column=1,columnspan=1)
         
+        # Projective Curves Frame
+        self.elliptic_curve_frame = tk.Frame(main,width=250,height=300,highlightthickness=1,highlightbackground="#FFFF00")
+        self.elliptic_curve_frame.grid(row=1,column=1,columnspan=1)
+            # Title Frame
+        self.EC_title_frame = tk.Frame(self.elliptic_curve_frame,width=250,height=50,highlightbackground="#FFFFFF")
+        self.EC_title_frame.grid(row=0,column=0)
+
+        tk.Label(self.EC_title_frame, text="Elliptic Curve").grid(row=0,column=0)
+        # EC_title_canvas = tk.Canvas(self.EC_title_frame, width=250)
+        # EC_title_canvas.grid(row=2,column=0)
+        # img = tk.PhotoImage(file="Projective Curve Equation.gif")
+        # EC_title_canvas.create_image(200,200,image=img)
+        
+        # path = "Projective Curve Equation.gif"
+        # img = ImageTk.PhotoImage(Image.open(path))
+        # panel = tk.Label(root, image = img)
+
+
         # Calculator Frame (inside Middle Frame)
         self.calc_frame = tk.Frame(self.middle_frame,width=400,height=100,highlightthickness=1, highlightbackground="#FFFFFF")
         self.calc_frame.grid(row=4,column=2,pady=15)

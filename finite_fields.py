@@ -123,7 +123,7 @@ class Fp:
         return y
 
 
-    def group_orders(self):
+    def group_orders(self):                                                     # Might be unused
         # Returns group's orders in a tuple
         # 
         # (add_group_order, mul_group_order)
