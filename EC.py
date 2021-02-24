@@ -1,3 +1,5 @@
+# Switching to windows DONE
+
 # Basics of Elliptic Curve Cryptography implementation on Python
 import collections
 
@@ -326,5 +328,3 @@ if __name__ == "__main__":
     assert dsa.validate(hashval, sig, pub)
     pass
 '''
-
-# Switching to windows
