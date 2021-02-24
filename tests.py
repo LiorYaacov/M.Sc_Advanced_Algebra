@@ -1,3 +1,5 @@
+# Switching to windows DONE
+
 import math
 import numpy as np
 import matplotlib.pyplot as plt
@@ -166,5 +168,3 @@ print(ppoints)
 
 
 plot_curve(-3,5,5)
-
-# Switching to windows
