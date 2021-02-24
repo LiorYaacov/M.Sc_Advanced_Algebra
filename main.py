@@ -281,3 +281,5 @@ class final_project:
 root = tk.Tk()
 main = final_project(root)
 root.mainloop()
+
+# Switching to windows
