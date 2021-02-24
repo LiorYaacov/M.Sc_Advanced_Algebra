@@ -1,5 +1,3 @@
-# Switching to windows DONE
-
 import tkinter as tk
 from tkinter import messagebox
 from finite_fields import Fp

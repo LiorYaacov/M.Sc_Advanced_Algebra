@@ -1,5 +1,3 @@
-# Switching to windows DONE
-
 import time
 
 class Fp:

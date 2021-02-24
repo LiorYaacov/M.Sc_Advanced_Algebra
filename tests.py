@@ -1,5 +1,3 @@
-# Switching to windows DONE
-
 import math
 import numpy as np
 import matplotlib.pyplot as plt
