@@ -123,3 +123,5 @@ class test_gui:
 root = tk.Tk()
 test_gui(root)
 root.mainloop()
+
+# Switching to windows
