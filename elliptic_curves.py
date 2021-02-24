@@ -1,3 +1,5 @@
+# Switching to windows DONE
+
 import time
 
 class Fp:
@@ -446,8 +448,3 @@ P.generate()
 # P.point_order()         # 130
 # Q.point_order()         # 65
 # --------------------------------- #
-
-# new
-# newer
-
-# Switching to windows

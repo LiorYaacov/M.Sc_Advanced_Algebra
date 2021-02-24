@@ -1,3 +1,5 @@
+# Switching to windows DONE
+
 import time
 
 '''
@@ -139,5 +141,3 @@ print(exp_by_square(83,10001,1501))
 end_time = time.time()
 print(end_time-start_time)
 
-
-# Switching to windows

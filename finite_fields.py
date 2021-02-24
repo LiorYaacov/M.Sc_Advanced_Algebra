@@ -1,3 +1,5 @@
+# Switching to windows DONE
+
 import time
 
 class Fp:
@@ -279,5 +281,3 @@ start_time = time.time()
 print(p.exp_by_square(5,22,10))
 end_time = time.time()
 print(end_time-start_time)
-
-# Switching to windows
