@@ -1,5 +1,3 @@
-# Switching to windows DONE
-
 # Basics of Elliptic Curve Cryptography implementation on Python
 import collections
 
