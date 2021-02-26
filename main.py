@@ -1,6 +1,6 @@
 import tkinter as tk
 from tkinter import messagebox
-from finite_fields import Fp
+from advanced_algebra import Fp
 
 class final_project:
 
@@ -20,7 +20,7 @@ class final_project:
         self.middle_frame.grid(row=1,column=0,padx=10,pady=5,columnspan=1)
         
         # Projective Curves Frame
-        self.elliptic_curve_frame = tk.Frame(main,width=250,height=300,highlightthickness=1,highlightbackground="#FFFF00")
+        self.elliptic_curve_frame = tk.Frame(main,width=250,height=300,highlightthickness=1,highlightbackground="#FF0000")
         self.elliptic_curve_frame.grid(row=1,column=1,columnspan=1)
             # Title Frame
         self.EC_title_frame = tk.Frame(self.elliptic_curve_frame,width=250,height=50,highlightbackground="#FFFFFF")
