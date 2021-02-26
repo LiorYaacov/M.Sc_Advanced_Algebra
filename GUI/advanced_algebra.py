@@ -132,9 +132,9 @@ class Fp:
         # (add_group_order, mul_group_order)
 
         add_group_order = self.mod
-        #mul_group_order = TBD
+        mul_group_order = self.mod-1
         
-        return (add_group_order,-1)
+        return (add_group_order,mul_group_order)
 
     def add_element_order(self):
         # Calculates the order of p (+ mod p)
