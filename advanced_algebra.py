@@ -330,10 +330,11 @@ class Point(Fp):
         # Generates the elements of <P>
         # if calc_order==1: calculates the order of P
 
-        if not calc_order:
-            print(f"<{self}> = {self}", end="") 
+        # if not calc_order:
+        #     print(f"<{self}> = {self}", end="") 
         
         P_temp = self
+        P_elements = []
         order = 1
 
         while (P_temp != (0,0)):
@@ -341,9 +342,12 @@ class Point(Fp):
             order += 1
             if calc_order:                              # Only calculate order (without printing <P> elements)
                 continue
-            print(f",{P_temp}", end="")
+            #print(f",{P_temp}", end="")
+            P_elements.append(P_temp)
         
-        return order    
+        if calc_order:
+            return order
+        return P_elements
 
         # Verification:
         # https://graui.de/code/elliptic2/
@@ -382,9 +386,9 @@ class Point(Fp):
 
         # Verify results using:
         # http://www.christelbach.com/ECCalculator.aspx
-        
-        
-        pass
+
+        result = self.double_and_add(n)
+        return result
 
 
 
