@@ -1,3 +1,10 @@
+#
+# Advanced Algebra - Final Project
+# by Lior Yaacov
+# Bar-Ilan University
+# February 2021
+#
+
 import time
 import math
 import random
