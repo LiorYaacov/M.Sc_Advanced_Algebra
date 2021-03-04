@@ -1,6 +1,8 @@
 import time
 import math
+import random
 import numpy as np
+from mpldatacursor import datacursor
 from matplotlib import pyplot as plt
 
 class Fp:
@@ -72,7 +74,6 @@ class Fp:
         
         # Exception for division by zero:
         if p2.p == 0:
-            # Maybe raise?
             return "Division by zero is not defined"
 
         # check whether inv(p2) exists:
@@ -83,13 +84,6 @@ class Fp:
         p2_inv = Fp(Fp.inverse(p2), self.mod)
 
         return (self.p * p2_inv.p)%self.mod
-    
-    # def __pow__(self, p2):
-
-    #     if isinstance(p2, Fp):
-    #         return (self.p**p2.p)%self.mod
-    #     else:
-    #         return (self.p**p2)%self.mod
     
     def __pow__(self, p2):
 
@@ -157,6 +151,8 @@ class Fp:
         current = self.p
         
         while(current != self.e_mul):
+            if current==0:
+                return None
             current *= self.p
             current %= self.mod
             i += 1
@@ -174,17 +170,23 @@ class Fp:
             return base%m
         
         x = self.exp_by_square(base, exp//2, m)
-
-        print(f"{base}^{exp} = {x}")
-        
         x = (x*x) % m
-
         
         if (exp%2 == 0):
             return x
         else:
             return (((base%m) * x) % m)
 
+    def safe_prime_mul_order(self):
+
+        if (self.p)%self.mod == 1:
+            return 1
+        elif (self.p**2)%self.mod == 1:
+            return 2
+        elif (self.exp_by_square(self.p,((self.mod-1)/2),self.mod)) == 1:
+            return int((self.mod-1)/2)
+        elif (self.exp_by_square(self.p,self.mod-1,self.mod)) == 1:
+            return self.mod-1
 
 class EllipticCurves:
 
@@ -218,6 +220,27 @@ class EllipticCurves:
 
         return points
     
+    def smooth_curve(self,k):
+
+        # Returns k pairs of (a,b) that satisfied: 4a^3 + 27b^2 != 0
+        # (if exist)
+        #
+        # use k == -1 to calculate all pairs exist
+
+        pairs = []
+        for a in range(2,self.p):
+            for b in range(2,self.p):
+                result = (4*(a**3) + 27*(b**2))%self.p
+                if result != 0:
+                    pairs.append((a,b))
+                    k -= 1
+                    print(f"4*{a}^3 + 27*{b}^2 = {result} (mod {self.p})")
+
+                    if k == 0:
+                        return pairs
+        
+        return pairs
+
     def Hasses_bound(self):
         
         lower_bound = int(self.p + 1 - (2*math.sqrt(self.p)))
@@ -226,16 +249,42 @@ class EllipticCurves:
         print(f"{lower_bound} <= #C(Fp) <= {upper_bound}")
 
     def show_points(self):
+        fig, ax = plt.subplots()
+        ax.set_title('Click on a dot to display its label')
+
+        # # Plot a number of random dots
+        # for i in range(1, 1000):
+        #     ax.scatter([random.random()], [random.random()], label='$ID: {}$'.format(i))
 
         points = self.affine_elliptic_curve_points()
 
         for i in points:
-            plt.scatter(i[0],i[1],  color='black')
+            ax.scatter(i[0],i[1], color='red', label='$ID: {}$'.format(i), edgecolor="black", s=8)
+
+        # Use a DataCursor to interactively display the label for a selected line...
+        datacursor(formatter='{label}'.format,bbox=dict(fc='green'), draggable=True)
+
         plt.grid()
         plt.title(f"a={self.a}, b={self.b}, Number of Points: {len(points)} (w/o infinity)")
         plt.show()
+    
+    def plot_curve(self):
 
-        return points
+        # Plot curve
+        y, x = np.ogrid[-5:5:100j, -5:5:100j]
+
+        curve = (y**2) - (x**3) - (self.a*x) - self.b
+        plt.contour(x.ravel(), y.ravel(), curve, [0])
+        plt.grid()
+        plt.title(f"a={self.a}, b={self.b}")
+        
+        # Plot axis
+        plt.axvline(x=0, color='k')
+        plt.axhline(y=0, color='k')
+
+        #datacursor(formatter='{label}'.format,bbox=dict(fc='green'), draggable=True)
+
+        plt.show()
 
 class Point(Fp):
 
@@ -245,11 +294,9 @@ class Point(Fp):
 
         return (((y**2 - x**3 - (a*x) - b))%p == 0)
         #return (((self.y**2 - self.x**3 - (self.a*self.x) - self.b))%self.p == 0)
-
     def __repr__(self):
 
         return f"({self.x},{self.y})"
-
     def __init__(self,x,y,p,a,b):
         
         if x==y==0:
@@ -264,8 +311,6 @@ class Point(Fp):
         self.a = a
         self.b = b
         self.order = None
-
-
     def __add__(self, p2):
         
         ## TBD
@@ -313,9 +358,7 @@ class Point(Fp):
             
             
         else:
-            return (0,0)
-
-    
+            return (0,0)   
     def inverse(self):
         # Returns -P
 
@@ -325,13 +368,9 @@ class Point(Fp):
             y_inv += self.p
 
         return (self.x, y_inv)
-
     def generate(self, calc_order=0):
         # Generates the elements of <P>
         # if calc_order==1: calculates the order of P
-
-        # if not calc_order:
-        #     print(f"<{self}> = {self}", end="") 
         
         P_temp = self
         P_elements = []
@@ -351,22 +390,21 @@ class Point(Fp):
 
         # Verification:
         # https://graui.de/code/elliptic2/
-        
-
     def point_order(self):
         
         return self.generate(calc_order=1)
         # http://www.christelbach.com/ECCalculator.aspx
-
-
     def bits(self, n):
+        #
+        # Converting n to it's binary representation
+
         while n:
             yield n & 1
             n >>= 1
-
     def double_and_add(self, n):
-        
-        # TBD
+        #
+        # Calculates n*P using the Double and Add algorithm
+
         # if P = (0,0) return infinity
 
         result = Point(0,0,self.p,self.a,self.b)
@@ -378,7 +416,6 @@ class Point(Fp):
                 result += accumulator
             accumulator += accumulator
         return result
-
     def nP(self, n):
 
         # How To:
@@ -392,94 +429,3 @@ class Point(Fp):
 
 
 
-
-# --------------------------------- #
-# Hasse's Theorem
-
-# C = EllipticCurves(1,1,11)
-#print(C.affine_elliptic_curve_points())
-#C.Hasses_bound()
-
-# C.show_points()
-
-
-# --------------------------------- #
-
-# --------------------------------- #
-# nP Calculation #
-
-# p = Point(3,104,263,5,-9)
-
-# print(p.double_and_add(89))
-#print(p.nP(2))
-# --------------------------------- #
-
-
-
-#################
-# Driver
-
-# EllipticCurve
-        # ec = EllipticCurves(1,1,263)
-        # print(ec.affine_elliptic_curve_points())
-
-
-
-# --------------------------------- #
-# Points Addition
-# P = Point(2,167,263,1,1)
-# Q = Point(2,96,263,1,1)
-
-# print(P+Q)
-
-
-# Adding points that are not on the same curve:
-# P = Point(2,167,263,1,1)
-# Q = Point(2,96,263,1,1)
-
-# print(P+Q)
-
-
-# Creating the point at infinity
-# Should raise a ValueError
-#
-# P = Point(0,0,263,1,1)
-# print(P+P)
-# --------------------------------- #
-
-
-
-# --------------------------------- #
-# Point Inverse
-# p1 = Point(6,152,263)
-# print(p1.inverse())
-# --------------------------------- #
-
-
-
-
-# --------------------------------- #
-# Point Generator <P>
-# P = Point(8,235,263,1,1)
-
-# P.generate()
-# --------------------------------- #
-
-
-# --------------------------------- #
-# is_on_curve
-
-#P = Point(1,22,263,1,1)
-# --------------------------------- #
-
-
-
-# --------------------------------- #
-# Point Order
-
-# P = Point(1,23,263,1,1)
-# Q = Point(8,235,263,1,1)
-
-# P.point_order()         # 130
-# Q.point_order()         # 65
-# --------------------------------- #
