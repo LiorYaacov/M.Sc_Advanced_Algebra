@@ -210,9 +210,6 @@ class EllipticCurves:
 
         for x in range(self.p):
             for y in range(self.p):
-                # if z=0 -> infinity point
-                if x==y==0:
-                    continue
                 
                 # y^2 - x^3 - a*x - b = 0
                 c1 = (y**2)%self.p

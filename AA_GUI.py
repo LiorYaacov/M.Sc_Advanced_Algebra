@@ -315,6 +315,12 @@ class Toplevel1:
         points = C.affine_elliptic_curve_points()
 
         # Print to GUI
+        self.results_TB.insert(tk.END, "C = {\n")
+        for i in points:
+            self.results_TB.insert(tk.END, f"({i[0]} : {i[1]} : 1),")
+        
+        self.results_TB.insert(tk.END, "\n}\n")
+
         self.results_TB.insert(tk.END, "Caff = {\n")
         for i in points:
             self.results_TB.insert(tk.END, f"{i},")
